@@ -23,13 +23,13 @@ void gotoxy(int x,int y)
 	COORD pos;
 	pos=MkCoord(x,y);
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleCursorPosition(pos,handle);
+	SetConsoleCursorPosition(handle,pos);
 	return;
 }
 void ChangeColor(WORD color)
 {
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(color,handle);
+    SetConsoleTextAttribute(handle,color);
 }
 void postcxy(int c,int x,int y,WORD color)
 {
@@ -38,6 +38,8 @@ void postcxy(int c,int x,int y,WORD color)
 	GetConsoleScreenBufferInfo(handle,&csbi);
 	SetConsoleCursorPosition(handle,MkCoord(x,y));
 	SetConsoleTextAttribute(handle,color);
-	baseputc(c);
-	
+	baseputchar(c);
+	SetConsoleTextAttribute(handle,csbi.wAttributes);
+	SetConsoleCursorPosition(handle,csbi.dwCursorPosition);
+
 }
