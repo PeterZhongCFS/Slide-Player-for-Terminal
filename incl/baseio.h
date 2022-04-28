@@ -1,3 +1,5 @@
+#ifndef BASEIO_H
+#define BASEIO_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -43,3 +45,4 @@ void postcxy(int c,int x,int y,WORD color)
 	SetConsoleCursorPosition(handle,csbi.dwCursorPosition);
 
 }
+#endif
