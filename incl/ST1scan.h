@@ -1,8 +1,9 @@
 #ifndef ST1SCAN_H
 #define ST1SCAN_H
 #include <stdio.h>
+#include <ctype.h>
 #include <token.h>
-void ReadST1(const char*);
+void RaadST1(const char*);
 void scan(FILE*FileHandle)
 {
     if(feof(FileHandle))return SCANEOF;
@@ -11,7 +12,11 @@ void scan(FILE*FileHandle)
     {
         in_char=fgetc(FileHandle);
         if(isspace(in_char))continue;
-        if(isdigit(in_char))
+        switch(in_char)
+        {
+            case '(':return LPAREN;
+            case ')':return RPAREN;
+        }
     }
     return SCANEOF;
 }
