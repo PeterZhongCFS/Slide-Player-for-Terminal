@@ -1,6 +1,6 @@
-#include <baseio.h>
+#include <ST1scan.h>
 int main()
 {
-    postcxy('H',5,10,0xf2);
+    ReadST1("1.txt");
     return 0;
 }
