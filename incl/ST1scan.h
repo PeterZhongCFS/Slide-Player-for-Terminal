@@ -16,7 +16,8 @@ int scan(FILE*FileHandle,BUFFER*buffer)
         if(isspace(in_char))continue;
         switch(in_char)
         {
-            case '<':return LPAREN;
+            case '<':
+                return LPAREN;
             case '>':return RPAREN;
             case '=':return ASSIGN;
             case '/':return OPCLOSE;
@@ -46,6 +47,10 @@ int scan(FILE*FileHandle,BUFFER*buffer)
         return UDF;
     }
     return SCANEOF;
+}
+void Content()
+{
+
 }
 void ReadST1(const char*file)
 {

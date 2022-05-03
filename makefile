@@ -1,5 +1,19 @@
-all : bin/test.exe
+all : bin/main.exe bin/test.exe
 	@echo DONE.
+
+main : bin/main.exe
+	@echo DONE.
+
+test : bin/test.exe
+	@echo DONE.
+
+bin/main.exe : bin/main.o
+	@echo Make bin/main.exe
+	@g++  bin/main.o  -o bin/main.exe
+
+bin/main.o : src/main.cpp
+	@echo Make bin/main.o
+	@g++ -c -I incl src/main.cpp  -o bin/main.o
 
 bin/test.exe : bin/test.o
 	@echo Make bin/test.exe

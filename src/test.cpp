@@ -1,6 +1,12 @@
-#include <ST1scan.h>
+#include<stdio.h>
+#include<stdlib.h>
 int main()
 {
-    ReadST1("1.txt");
-    return 0;
+    ungetc('a',stdin);
+    printf("%c",getchar());
+    ungetc('b',stdin);
+    ungetc('c',stdin);
+    printf("%c",getchar());
+    printf("%c",getchar());
+
 }
