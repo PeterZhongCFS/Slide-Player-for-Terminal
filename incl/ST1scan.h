@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <token.h>
 #include <buffer.h>
+#include <PostMessage.h>
 void RaadST1(const char*);
 int scan(FILE*FileHandle,BUFFER*buffer)
 {
@@ -17,7 +18,16 @@ int scan(FILE*FileHandle,BUFFER*buffer)
         switch(in_char)
         {
             case '<':
-                return LPAREN;
+                in_char=fgetc(FileHandle);
+                if(in_char!='!')
+                {
+                    ungetc(in_char,FileHandle);
+                    return LPAREN;
+                }
+                if(fgetc(FileHandle)!='-')
+                {
+                    Warning("<");
+                }
             case '>':return RPAREN;
             case '=':return ASSIGN;
             case '/':return OPCLOSE;
