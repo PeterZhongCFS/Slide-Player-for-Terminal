@@ -13,7 +13,6 @@ typedef struct{
     char subcontent[16][64];
 }TAG;
 void RaadST1(const char*);
-int FileX=0,FileY=1;
 int scan(FILE*FileHandle,BUFFER*buffer)
 {
     (*buffer).clear();
@@ -22,12 +21,6 @@ int scan(FILE*FileHandle,BUFFER*buffer)
     while(!feof(FileHandle))
     {
         in_char=fgetc(FileHandle);
-        FileX++;
-        if(in_char=='\n')
-        {
-            FileY++;
-            FileX=0;
-        }
         if(isspace(in_char))continue;
         switch(in_char)
         {
@@ -118,3 +111,4 @@ End
 </Slide>
 */
 #endif
+
