@@ -38,10 +38,19 @@ int scan(FILE*FileHandle,BUFFER*buffer)
                     ungetc(in_char,FileHandle);
                     return LPAREN;
                 }
-                if(fgetc(FileHandle)!='-')
+                FileX++;
+                if((in_char=fgetc(FileHandle))!='-')
                 {
-                    Warning("<");
+                    ungetc(in_char,FileHandle);
+                    Error(FileX+1,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
                 }
+                FileX++;
+                if((in_char=fgetc(FileHandle))!='-')
+                {
+                    ungetc(in_char,FileHandle);
+                    Error(FileX+1,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
+                }
+                FileX++;
             case '>':return RPAREN;
             case '=':return ASSIGN;
             case '/':return OPCLOSE;
@@ -78,8 +87,9 @@ void Content()
 }
 TAG ReadTag(FILE*FileHandle)
 {
+    BUFFER buffer;
     int mode=scan(stdin,&buffer);
-    if(mode!=LPAREN)Error("ReadTag:Not")
+    if(mode!=LPAREN)Error(FileX,FileY,"ReadTag:Not");
 
 }
 void ReadST1(const char*file)

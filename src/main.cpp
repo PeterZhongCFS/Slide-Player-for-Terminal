@@ -1,7 +1,7 @@
 #include <ST1scan.h>
 int main()
 {
-   //ReadST1("1.txt");
-    Warning("$-7Call($-4READST1$-7)Failed.");
+   ReadST1("1.txt");
+    
     return 0;
 }

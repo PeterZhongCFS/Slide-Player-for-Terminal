@@ -7,7 +7,7 @@ int Xto10(char x)
 {
     return x-(isdigit(x)?'0':(isupper(x)?'A':'a')-10);
 }
-void Error(const char*str)
+void Error(int X,int Y,const char*str)
 {
     
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -20,6 +20,10 @@ void Error(const char*str)
     csbi.wAttributes=(csbi.wAttributes&0xf0)|0x07;
     SetConsoleTextAttribute(OutputHandle,csbi.wAttributes);
     printf(":");
+    if(Y!=0)
+    {
+        printf("%d:%d:",Y,X);
+    }
     while(*str)
     {
         if(*str!='$')
@@ -43,15 +47,20 @@ void Error(const char*str)
         SetConsoleTextAttribute(OutputHandle,csbi.wAttributes);
         str++;
     }
-    exit(-1);
+    exit(0);
 }
-void PostMsg(const char*str)
+void PostMsg(int X,int Y,const char*str)
 {
-    
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     HANDLE OutputHandle;
     OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     GetConsoleScreenBufferInfo(OutputHandle,&csbi);
+    csbi.wAttributes=(csbi.wAttributes&0xf0)|0x07;
+    SetConsoleTextAttribute(OutputHandle,csbi.wAttributes);
+    if(Y!=0)
+    {
+        printf("%d:%d:",Y,X);
+    }
     while(*str)
     {
         if(*str!='$')
@@ -76,7 +85,7 @@ void PostMsg(const char*str)
         str++;
     }
 }
-void Warning(const char*str)
+void Warning(int X,int Y,const char*str)
 {
     
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -89,6 +98,10 @@ void Warning(const char*str)
     csbi.wAttributes=(csbi.wAttributes&0xf0)|0x07;
     SetConsoleTextAttribute(OutputHandle,csbi.wAttributes);
     printf(":");
+    if(Y!=0)
+    {
+        printf("%d:%d:",Y,X);
+    }
     while(*str)
     {
         if(*str!='$')
