@@ -1,6 +1,11 @@
 all : bin/main.exe bin/test.exe
 	@echo DONE.
 
+RunMain : bin/main.exe
+	@./bin/main.exe
+
+RunTest : bin/test.exe
+	@./bin/test.exe
 main : bin/main.exe
 	@echo DONE.
 
