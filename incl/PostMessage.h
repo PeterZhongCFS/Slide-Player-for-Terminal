@@ -7,18 +7,16 @@ int Xto10(char x)
 {
     return x-(isdigit(x)?'0':(isupper(x)?'A':'a')-10);
 }
-void Error(int X,int Y,const char*str)
+void Error(const char*file,int X,int Y,const char*str)
 {
     
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     HANDLE OutputHandle;
     OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     GetConsoleScreenBufferInfo(OutputHandle,&csbi);
-    csbi.wAttributes=(csbi.wAttributes&0xf0)|0x0C;
-    SetConsoleTextAttribute(OutputHandle,csbi.wAttributes);
-    printf("Error");
     csbi.wAttributes=(csbi.wAttributes&0xf0)|0x07;
     SetConsoleTextAttribute(OutputHandle,csbi.wAttributes);
+    printf("%s",file);
     printf(":");
     if(Y!=0)
     {

@@ -14,7 +14,7 @@ typedef struct{
 }TAG;
 void RaadST1(const char*);
 int FileX=0,FileY=1;
-int scan(FILE*FileHandle,BUFFER*buffer)
+int scan(const char*fn,FILE*FileHandle,BUFFER*buffer)
 {
     (*buffer).clear();
     if(feof(FileHandle))return SCANEOF;
@@ -42,13 +42,13 @@ int scan(FILE*FileHandle,BUFFER*buffer)
                 if((in_char=fgetc(FileHandle))!='-')
                 {
                     ungetc(in_char,FileHandle);
-                    Error(FileX+1,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
+                    Error(fn,FileX+1,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
                 }
                 FileX++;
                 if((in_char=fgetc(FileHandle))!='-')
                 {
                     ungetc(in_char,FileHandle);
-                    Error(FileX+1,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
+                    Error(fn,FileX+1,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
                 }
                 FileX++;
             case '>':return RPAREN;
@@ -85,11 +85,11 @@ void Content()
 {
 
 }
-TAG ReadTag(FILE*FileHandle)
+TAG ReadTag(const char*file,FILE*FileHandle)
 {
     BUFFER buffer;
-    int mode=scan(stdin,&buffer);
-    if(mode!=LPAREN)Error(FileX,FileY,"ReadTag:Not");
+    int mode=scan(file,stdin,&buffer);
+    if(mode!=LPAREN)Error(file,FileX,FileY,"ReadTag:Not");
 
 }
 void ReadST1(const char*file)
@@ -102,7 +102,8 @@ void ReadST1(const char*file)
     BUFFER buffer;
     while(1)
     {
-        int mode=scan(stdin,&buffer);
+        int mode=scan(file,stdin,&buffer);
+        printf("-------------\n");
         if(mode==-1)printf("%d",*buffer.reading());
         printf("%d{%s}\n",mode,buffer.reading());
         if(mode==SCANEOF)break;
