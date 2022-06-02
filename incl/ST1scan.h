@@ -14,54 +14,81 @@ typedef struct{
 }TAG;
 void RaadST1(const char*);
 int FileX=0,FileY=1;
+char stdget(FILE*fp)
+{
+    char in_char=fgetc(fp);
+    if(in_char=='\n')
+        FileX=0,FileY++;
+    else if(!feof(fp))
+        FileX++;
+    return in_char;
+}
+void stdunget(char c,File*fp)
+{
+    ungetc(c,fp);
+    FileX--;
+    return;
+}
 int scan(const char*fn,FILE*FileHandle,BUFFER*buffer)
 {
+    kel:
     (*buffer).clear();
     if(feof(FileHandle))return SCANEOF;
+    int cnt;
     char in_char;
     while(!feof(FileHandle))
     {
-        in_char=fgetc(FileHandle);
-        FileX++;
-        if(in_char=='\n')
-        {
-            FileY++;
-            FileX=0;
-        }
+        in_char=stdget(FileHandle);
         if(isspace(in_char))continue;
         switch(in_char)
         {
             case '<':
-                in_char=fgetc(FileHandle);
+                in_char=stdget(FileHandle);
                 if(in_char!='!')
                 {
-                    ungetc(in_char,FileHandle);
+                    stdunget(in_char,FileHandle);
                     return LPAREN;
                 }
-                FileX++;
-                if((in_char=fgetc(FileHandle))!='-')
+                if((in_char=stdget(FileHandle))!='-')
                 {
-                    ungetc(in_char,FileHandle);
-                    Error(fn,FileX+1,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
+                    stdunget(in_char,FileHandle);
+                    Error(fn,FileX,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
                 }
-                FileX++;
-                if((in_char=fgetc(FileHandle))!='-')
+                if((in_char=stdget(FileHandle))!='-')
                 {
-                    ungetc(in_char,FileHandle);
-                    Error(fn,FileX+1,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
+                    stdunget(in_char,FileHandle);
+                    Error(fn,FileX,FileY,"Comment formatting error.We use Comment as $-2<!-- (Comment Content) -->$-7");
                 }
-                FileX++;
+                cnt=0;
+                while(1)
+                {
+                    in_char=stdget(FileHandle);
+                    if(feof(FileHandle))
+                    {
+                        Error(fn,FileX+1,FileY,"Comment has no end");
+                    }   
+                    FileX++;
+                    if(in_char=='>')
+                    {
+                        if(cnt>2)
+                            goto kel;
+                    }
+                    if(in_char=='-')cnt++;
+                    else    cnt=0;
+                }
+
+                break;
             case '>':return RPAREN;
             case '=':return ASSIGN;
             case '/':return OPCLOSE;
         }
         if(in_char=='\"')
         {
-            in_char=fgetc(FileHandle);
+            in_char=stdget(FileHandle);
             while(in_char!='\"')
             {
                 (*buffer).push(in_char);
-                in_char=fgetc(FileHandle);
+                in_char=stdget(FileHandle);
             }
             return ID;
         }
@@ -70,9 +97,9 @@ int scan(const char*fn,FILE*FileHandle,BUFFER*buffer)
             while(isalnum(in_char))
             {
                (*buffer).push(in_char);
-                in_char=fgetc(FileHandle);
+                in_char=stdget(FileHandle);
             }
-            ungetc(in_char,FileHandle);
+            stdunget(in_char,FileHandle);
             return ID;
         }
         if(feof(FileHandle))return SCANEOF;
